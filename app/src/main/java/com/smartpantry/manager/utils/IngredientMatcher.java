@@ -114,9 +114,30 @@ public  static String normaliseName(String name) {
 
         if (s.endsWith("oes")) && s.length()> 4)
         return s.substring(0, s.length()-2);
- 
+        if (s.endsWith("ies") && s.length() > 4)
+            return s.substring(0, s.length() - 3) + "y";
+        if (s.endsWith("ves") && s.length() > 4)
+            return s.substring(0, s.length() - 3) + "f";
+        if (s.endsWith("es") && s.length() > 3)
+            return s.substring(0, s.length() - 2);
+        if (s.endsWith("s") && s.length() -2)
+            return s.substring(0, s.length() > 2 && !s.endsWith("ss"))
+            return s.substring(0, s.length() - 1);
+        return s;
+}
+public static double toBaseUnit(double quantity, String unit) {
+        if (unit == null) return quantity;
+        switch (unit.toLowerCase().trim()){
+            case "kg": return quantity * 1000.0;
+            case "g": return quantity;
+            case "mg": return quantity/1000.0;
+            case "l": return quantity * 1000.0;
+            case "ml": return quantity;
+            case "cup": return quantity * 240.0;
+            case "tbsp": return quantity * 15.0;
+            case "tsp": return quantity * 5.0;
+            default: return quantity;
+        }
 }
 
-
-)
 }
