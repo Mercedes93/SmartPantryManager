@@ -48,6 +48,27 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         etName     = findViewById(R.id.etName);
         etQuantity = findViewById(R.id.etQuantity);
         etExpiry   = findViewById(R.id.etExpiry);
+        etExpiry.addTextChangedListener(new android.text.TextWatcher() {
+            private boolean editing = false;
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (editing) return;
+                editing = true;
+                String digits = s.toString().replace("-", "");
+                StringBuilder formatted = new StringBuilder();
+                for (int i = 0; i < digits.length() && i < 8; i++) {
+                    formatted.append(digits.charAt(i));
+                    if (i == 3 || i == 5) formatted.append("-");
+                }
+                etExpiry.setText(formatted.toString());
+                etExpiry.setSelection(formatted.length());
+                editing = false;
+            }
+        });
         spinnerUnit = findViewById(R.id.spinnerUnit);
         Button btnSave = findViewById(R.id.btnSave);
 

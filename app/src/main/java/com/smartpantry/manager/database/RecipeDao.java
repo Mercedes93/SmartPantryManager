@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
+@Dao
 public interface RecipeDao {
     //Add new recipes to recipes table. Long creates auto id for new
     // inserted recipe which is then linked immediately

@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 
 @Database(
         entities = {PantryItem.class, Recipe.class, RecipeIngredient.class},
-        version = 1
+        version = 1,
         exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -39,13 +39,13 @@ public abstract class AppDatabase extends RoomDatabase {
                             "smart_pantry_db"
                     )
                             //runs once when db is first created on device and load recipes so it doesnt block ui
-                            .addCallback(new RoomDatabase.Callback()){
+                            .addCallback(new RoomDatabase.Callback() {
                         @Override
                                 public void onCreate(@NonNull SupportSQLiteDatabase db){
                             super.onCreate(db);
-                            databaseWriteExecutor.execute(( ) ->){
+                            databaseWriteExecutor.execute(() -> {
                                 DatabaseSeeder.seedRecipes(INSTANCE.recipeDao());
-                            };
+                            });
                         }
                     })
                     .build();

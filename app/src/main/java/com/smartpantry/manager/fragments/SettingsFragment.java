@@ -2,38 +2,31 @@ package com.smartpantry.manager.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.smartpantry.manager.R;
 import com.smartpantry.manager.database.AppDatabase;
 
-/// Settings / Profile screen.
-/// Persists user preferences via SharedPreferences.
-/// Available settings:
-///   \- Expiring-soon alerts toggle (items expiring within 3 days)
-///   \- Units preference (metric / imperial)
-///   \- Clear pantry action
 public class SettingsFragment extends Fragment {
 
-    public static final String PREF_EXPIRY_ALERTS   = "pref_expiry_alerts";
-    public static final String PREF_UNITS            = "pref_units";
-    public static final String UNITS_METRIC          = "metric";
-    public static final String UNITS_IMPERIAL        = "imperial";
+    public static final String PREF_EXPIRY_ALERTS = "pref_expiry_alerts";
+    public static final String PREF_UNITS         = "pref_units";
+    public static final String UNITS_METRIC       = "metric";
+    public static final String UNITS_IMPERIAL     = "imperial";
 
-    private Switch switchExpiryAlerts;
+    private SwitchCompat switchExpiryAlerts;
     private RadioGroup rgUnits;
     private SharedPreferences prefs;
 
@@ -56,7 +49,6 @@ public class SettingsFragment extends Fragment {
         View btnClearPantry = view.findViewById(R.id.btnClearPantry);
         TextView tvVersion  = view.findViewById(R.id.tvVersion);
 
-        // Load saved preferences
         switchExpiryAlerts.setChecked(prefs.getBoolean(PREF_EXPIRY_ALERTS, true));
         String savedUnits = prefs.getString(PREF_UNITS, UNITS_METRIC);
         if (UNITS_IMPERIAL.equals(savedUnits)) {
@@ -67,7 +59,6 @@ public class SettingsFragment extends Fragment {
 
         tvVersion.setText("Smart Pantry Manager v1.0");
 
-        // Save changes immediately as user interacts
         switchExpiryAlerts.setOnCheckedChangeListener((btn, isChecked) ->
                 prefs.edit().putBoolean(PREF_EXPIRY_ALERTS, isChecked).apply());
 
@@ -83,7 +74,7 @@ public class SettingsFragment extends Fragment {
     private void confirmClearPantry() {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Clear pantry?")
-                .setMessage("This will permanently remove all ingredients from your pantry. This cannot be undone.")
+                .setMessage("This will permanently remove all ingredients. This cannot be undone.")
                 .setPositiveButton("Clear", (dialog, which) -> {
                     AppDatabase.databaseWriteExecutor.execute(() -> {
                         AppDatabase.getDatabase(requireContext()).pantryDao().deleteAll();

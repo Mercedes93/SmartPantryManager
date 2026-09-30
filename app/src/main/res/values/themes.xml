@@ -10,5 +10,5 @@
 
     </style>
 
-    <style name="Theme.MyApplication" parent="Base.Theme.MyApplication" />
+    <style name="Theme.SmartPantryManager" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 </resources>

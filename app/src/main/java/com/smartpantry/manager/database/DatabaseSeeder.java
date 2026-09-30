@@ -1,8 +1,7 @@
 package com.smartpantry.manager.database;
 
 public class DatabaseSeeder {
-    public static void seedRecipes(RecipeDao dao){
-        if (dao.getRecipeCount()> 0) return;
+
 
         public static void seedRecipes(RecipeDao dao) {
             if (dao.getRecipeCount() > 0) return;

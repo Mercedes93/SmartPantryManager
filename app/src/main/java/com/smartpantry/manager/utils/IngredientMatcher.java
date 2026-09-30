@@ -31,14 +31,14 @@ public static List<Recipe> getAlmostThereRecipes(
         List<Recipe> allRecipes,
         List<RecipeIngredient> allIngredients,
         List<PantryItem> pantryItems) {
-        Map<Integer, list<RecipeIngredient>> ingredientMap = buildIngredientMap(allIngredients);
+        Map<Integer, List<RecipeIngredient>> ingredientMap = buildIngredientMap(allIngredients);
         Map<String, double[]> pantryMap = buildPantryMap(pantryItems);
 
         List<Recipe> almostThere = new ArrayList<>();
         for (Recipe recipe : allRecipes) {
             int missing = countMissingIngredients(recipe.getId(), ingredientMap, pantryMap);
             if (missing == 1) {
-                almostthere.add(recipe);
+                almostThere.add(recipe);
             }
         }
         return almostThere;
@@ -66,7 +66,7 @@ public static boolean canMakeRecipe(
 public static int countMissingIngredients(
         int recipeId,
         Map<Integer, List<RecipeIngredient>> ingredientMap,
-        Map<String double[]> pantryMap) {
+        Map<String, double[]> pantryMap) {
 
         List<RecipeIngredient> required = ingredientMap.get(recipeId);
         if (required == null) return Integer.MAX_VALUE;
@@ -99,7 +99,7 @@ private static Map<String, double []> buildPantryMap(List<PantryItem> pantryItem
         for (PantryItem item : pantryItems){
             String key = normaliseName(item.getName());
             double base = toBaseUnit(item.getQuantity(), item.getUnit());
-            if (map.containsKey()){
+            if (map.containsKey(key)){
                 map.get(key)[0] += base;
             } else {
                 map.put(key, new double[] {base});
@@ -112,7 +112,7 @@ public  static String normaliseName(String name) {
         if (name == null) return "";
         String s = name.toLowerCase().trim();
 
-        if (s.endsWith("oes")) && s.length()> 4)
+        if (s.endsWith("oes") && s.length()> 4)
         return s.substring(0, s.length()-2);
         if (s.endsWith("ies") && s.length() > 4)
             return s.substring(0, s.length() - 3) + "y";
@@ -120,8 +120,7 @@ public  static String normaliseName(String name) {
             return s.substring(0, s.length() - 3) + "f";
         if (s.endsWith("es") && s.length() > 3)
             return s.substring(0, s.length() - 2);
-        if (s.endsWith("s") && s.length() -2)
-            return s.substring(0, s.length() > 2 && !s.endsWith("ss"))
+        if (s.endsWith("s") && s.length() > 2 && !s.endsWith("ss"))
             return s.substring(0, s.length() - 1);
         return s;
 }

@@ -24,15 +24,14 @@ import com.smartpantry.manager.utils.IngredientMatcher;
 
 import java.util.List;
 
-//Shows only recipes that can be cooked now based on inventory in pantry and show recipes with 1 missing "Almost There" ingredient.
 public class SuggestedRecipesFragment extends Fragment {
 
     private RecyclerView rvSuggested;
     private RecyclerView rvAlmostThere;
     private RecipeAdapter suggestedAdapter;
     private RecipeAdapter almostThereAdapter;
-    private TextView tvEmpty;
     private TextView tvAlmostThereHeader;
+    private View layoutEmpty;
 
     @Nullable
     @Override
@@ -46,21 +45,20 @@ public class SuggestedRecipesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rvSuggested      = view.findViewById(R.id.rvSuggestedRecipes);
-        rvAlmostThere    = view.findViewById(R.id.rvAlmostThere);
-        tvEmpty          = view.findViewById(R.id.tvNoRecipes);
+        rvSuggested         = view.findViewById(R.id.rvSuggestedRecipes);
+        rvAlmostThere       = view.findViewById(R.id.rvAlmostThere);
         tvAlmostThereHeader = view.findViewById(R.id.tvAlmostThereHeader);
+        layoutEmpty         = view.findViewById(R.id.layoutEmpty);
 
         rvSuggested.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvAlmostThere.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        suggestedAdapter = new RecipeAdapter(recipe -> openDetail(recipe));
-        almostThereAdapter = new RecipeAdapter(recipe -> openDetail(recipe));
+        suggestedAdapter    = new RecipeAdapter(recipe -> openDetail(recipe));
+        almostThereAdapter  = new RecipeAdapter(recipe -> openDetail(recipe));
 
         rvSuggested.setAdapter(suggestedAdapter);
         rvAlmostThere.setAdapter(almostThereAdapter);
 
-        //rerun matching any time pantry changes
         AppDatabase.getDatabase(requireContext())
                 .pantryDao()
                 .getAllItems()
@@ -68,10 +66,9 @@ public class SuggestedRecipesFragment extends Fragment {
     }
 
     private void runMatching(List<PantryItem> pantryItems) {
-        // Run matching on a background thread to keep UI stable
         AppDatabase.databaseWriteExecutor.execute(() -> {
             AppDatabase db = AppDatabase.getDatabase(requireContext());
-            List<Recipe> allRecipes   = db.recipeDao().getAllRecipesSync();
+            List<Recipe> allRecipes           = db.recipeDao().getAllRecipesSync();
             List<RecipeIngredient> allIngredients = db.recipeDao().getAllIngredients();
 
             List<Recipe> suggested   = IngredientMatcher.getSuggestedRecipes(
@@ -79,7 +76,6 @@ public class SuggestedRecipesFragment extends Fragment {
             List<Recipe> almostThere = IngredientMatcher.getAlmostThereRecipes(
                     allRecipes, allIngredients, pantryItems);
 
-            // Remove strictly-matched from almost-there to avoid duplicates
             almostThere.removeAll(suggested);
 
             requireActivity().runOnUiThread(() -> {
@@ -87,10 +83,10 @@ public class SuggestedRecipesFragment extends Fragment {
                 almostThereAdapter.setRecipes(almostThere);
 
                 if (suggested.isEmpty()) {
-                    tvEmpty.setVisibility(View.VISIBLE);
+                    layoutEmpty.setVisibility(View.VISIBLE);
                     rvSuggested.setVisibility(View.GONE);
                 } else {
-                    tvEmpty.setVisibility(View.GONE);
+                    layoutEmpty.setVisibility(View.GONE);
                     rvSuggested.setVisibility(View.VISIBLE);
                 }
 

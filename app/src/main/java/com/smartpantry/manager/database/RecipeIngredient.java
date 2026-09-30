@@ -9,9 +9,10 @@ import androidx.room.PrimaryKey;
         foreignKeys = @ForeignKey(entity = Recipe.class,
         parentColumns = "id",
         childColumns = "recipeId",
-        onDelete = ForeignKey.CASCADE)
-),
-indices = {@Index("recipeId")} )
+        onDelete = ForeignKey.CASCADE),
+        indices = {@Index("recipeId")}
+)
+
 public class RecipeIngredient {
     @PrimaryKey(autoGenerate = true)
     private int id;

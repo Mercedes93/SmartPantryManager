@@ -12,7 +12,7 @@ import java.util.List;
 
 @Dao
 public interface PantryDao {
-    @insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(PantryItem item);
 
     @Update

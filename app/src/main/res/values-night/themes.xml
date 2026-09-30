@@ -1,7 +1,12 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MyApplication" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+<resources>
+    <style name="Base.Theme.SmartPantryManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#1565C0</item>
+        <item name="colorPrimaryVariant">#0d1b3e</item>
+        <item name="colorSurface">#1e1e2e</item>
+        <item name="android:colorBackground">#121212</item>
+        <item name="colorOnSurface">#e0e0e0</item>
+        <item name="android:statusBarColor">#0d1b3e</item>
     </style>
+
+    <style name="Theme.SmartPantryManager" parent="Base.Theme.SmartPantryManager" />
 </resources>
